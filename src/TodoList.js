@@ -4,6 +4,7 @@ import React, { Component } from 'react';
  * import React from 'react';
  * const Component = React.Component;
 */
+import './style.css';
 
 class TodoList extends Component {
     constructor(props) {
@@ -20,30 +21,49 @@ class TodoList extends Component {
 
     render() {
       return (
+        /*
+         * 在JSX中，大写字母开头的都是JSX自定义组件
+         * 如<Fragment>
+        */
+        <div>
+          {/* JSX内部注释范例1 */}
+          {
+            // JSX内部注释范例2
+          }
           <div>
-            <div>
-              <input
-                value={this.state.inputValue}
-                onChange={this.handleInputChange.bind(this)}
-              />
-              <button onClick={this.handleBtnClick.bind(this)}>submit</button>
-            </div>
-            <ul>
-              {
-                this.state.list.map((item, index) => {
-                  return <li 
-                          key={index} 
-                          onClick={this.handleItemDelete.bind(this, index)}>
-                            {item}
-                         </li>
-                  /*
-                   * 当在React中循环渲染的时候，需要给渲染出来的每一项增加一个key值
-                   * 这个key值在每一项中都不同，是唯一的，作为这一项的标识符
-                  */
-                })
-              }
-            </ul>
+            {/* 注意JSX内部不要用for来定义当label被点击后应该高亮的输入框，应该用htmlFor */}
+            <label htmlFor="textArea">输入内容</label>
+            {/* 注意JSX内部不要用class="xxx"来定义css样式，应该用className */}
+            <input
+              id = "textArea"
+              className = "input"
+              value={this.state.inputValue}
+              onChange={this.handleInputChange.bind(this)}
+            />
+            <button onClick={this.handleBtnClick.bind(this)}>submit</button>
           </div>
+          <ul>
+            {
+              this.state.list.map((item, index) => {
+                return <li 
+                        key={index} 
+                        onClick={this.handleItemDelete.bind(this, index)}
+                        dangerouslySetInnerHTML = {{__html: item}}>
+                        {
+                          // dangerouslySetInnerHTML = {{__html: item}}
+                          /* dangerouslySetInnerHTML可以用于禁止html转义，
+                          如输入“<h1>header</h1>”会直接生成大标题header而不是转义成简单字符串“<h1>header</h1>”
+                          如此提供了一些便利，但也增加了被XSS攻击的概率 */
+                        }
+                       </li>
+                /*
+                 * 当在React中循环渲染的时候，需要给渲染出来的每一项增加一个key值
+                 * 这个key值在每一项中都不同，是唯一的，作为这一项的标识符
+                */
+              })
+            }
+          </ul>
+        </div>
       );
     }
 
