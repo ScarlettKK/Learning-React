@@ -5,6 +5,7 @@ import React, { Component } from 'react';
  * const Component = React.Component;
 */
 import './style.css';
+import TodoItem from './TodoItem'
 
 class TodoList extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class TodoList extends Component {
       */
       this.state = {
           inputValue: "",
-          list: ["learn English"]
+          list: []
       }
     }
 
@@ -45,24 +46,28 @@ class TodoList extends Component {
           <ul>
             {
               this.state.list.map((item, index) => {
-                return <li 
-                        key={index} 
-                        onClick={this.handleItemDelete.bind(this, index)}
-                        dangerouslySetInnerHTML = {{__html: item}}>
-                        {
-                          // dangerouslySetInnerHTML = {{__html: item}}
-                          /* dangerouslySetInnerHTML可以用于禁止html转义，
-                          如输入“<h1>header</h1>”会直接生成大标题header而不是转义成简单字符串“<h1>header</h1>”
-                          如此提供了一些便利，但也增加了被XSS攻击的概率 */
-                        }
-                       </li>
-                /*
-                 * 当在React中循环渲染的时候，需要给渲染出来的每一项增加一个key值
-                 * 这个key值在每一项中都不同，是唯一的，作为这一项的标识符
-                */
+                {/* 父组件向子组件传递信息content = {xx} */}
+                return <TodoItem content = {item} key={index} index={index} 
+                        handleItemDelete={this.handleItemDelete.bind(this)}/>
+                      {/* 这里注意传递父组件方法之前需要先给父组件的方法绑定this，指向父组件 */}
               })
             }
           </ul>
+          {/*return <li 
+                  key={index} 
+                  onClick={this.handleItemDelete.bind(this, index)}
+                  dangerouslySetInnerHTML = {{__html: item}}>
+                  {
+                    // dangerouslySetInnerHTML = {{__html: item}}
+                    /* dangerouslySetInnerHTML可以用于禁止html转义，
+                    如输入“<h1>header</h1>”会直接生成大标题header而不是转义成简单字符串“<h1>header</h1>”
+                    如此提供了一些便利，但也增加了被XSS攻击的概率 
+                  }
+                 </li>
+          /*
+           * 当在React中循环渲染的时候，需要给渲染出来的每一项增加一个key值
+           * 这个key值在每一项中都不同，是唯一的，作为这一项的标识符
+          */}
         </div>
       );
     }
