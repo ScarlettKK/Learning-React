@@ -4,8 +4,14 @@ import React, { Component } from 'react';
  * import React from 'react';
  * const Component = React.Component;
 */
-import './style.css';
+// import './style.css';
 import TodoItem from './TodoItem'
+/******************/
+// 下面是代码优化部分
+// css的引入应该放于js后面
+import './style.css';
+// 上面是代码优化部分
+/******************/
 
 class TodoList extends Component {
     constructor(props) {
@@ -18,6 +24,15 @@ class TodoList extends Component {
           inputValue: "",
           list: []
       }
+      /******************/
+      // 下面是代码优化部分
+      // 提前bind好所有函数的this指向，后面不需要重复bind
+      this.handleInputChange = this.handleInputChange.bind(this);
+      this.handleBtnClick = this.handleBtnClick.bind(this);
+      this.handleItemDelete = this.handleItemDelete.bind(this);
+      this.getTodoItem = this.getTodoItem.bind(this);
+      // 上面是代码优化部分
+      /******************/
     }
 
     render() {
@@ -39,18 +54,21 @@ class TodoList extends Component {
               id = "textArea"
               className = "input"
               value={this.state.inputValue}
-              onChange={this.handleInputChange.bind(this)}
+              onChange={this.handleInputChange}
             />
-            <button onClick={this.handleBtnClick.bind(this)}>submit</button>
+            <button 
+              onClick={this.handleBtnClick}
+            >submit</button>
           </div>
           <ul>
             {
-              this.state.list.map((item, index) => {
-                {/* 父组件向子组件传递信息content = {xx} */}
-                return <TodoItem content = {item} key={index} index={index} 
-                        handleItemDelete={this.handleItemDelete.bind(this)}/>
-                      {/* 这里注意传递父组件方法之前需要先给父组件的方法绑定this，指向父组件 */}
-              })
+              /******************/
+              // 下面是代码优化部分
+              // 将js逻辑部分（循环）单独抽取出来成为函数，精简JSX部分的代码
+              // 以下是代码拆分的一种形式
+              this.getTodoItem()
+              // 上面是代码优化部分
+              /******************/
             }
           </ul>
           {/*return <li 
@@ -72,40 +90,93 @@ class TodoList extends Component {
       );
     }
 
-    handleInputChange(event){
-      this.setState({
-        inputValue: event.target.value
+    /******************/
+    // 下面是代码优化部分
+    // 将js逻辑部分（循环）单独抽取出来成为函数，精简JSX部分的代码
+    getTodoItem(){
+      return this.state.list.map((item, index) => {
+              {/* 父组件向子组件传递信息content = {xx} */}
+              return <TodoItem 
+                      content = {item} 
+                      key={index} 
+                      index={index} 
+                      handleItemDelete={this.handleItemDelete}/>
+                    {/* 这里注意传递父组件方法之前需要先给父组件的方法绑定this，指向父组件 */}
       })
+    }
+    // 上面是代码优化部分
+    /******************/
+
+    handleInputChange(event){
+      /******************/
+      // 下面是代码优化部分
+      // 新版react中setState已经开始接收一个函数作参数了
+      // 这样会让setState的执行处于异步状态，但是会提升性能
+      // 当然这时候访问event.target会出现一些问题，所以需要一个变量把当前的event.target值保存起来
+      const value = event.target.value;
+      this.setState(() => ({
+          inputValue: value
+      }))
+      // 上面是代码优化部分
+      /******************/
+      // this.setState({
+      //   inputValue: event.target.value
+      // })
     }
 
     handleBtnClick(){
-      this.setState({
-        list: [...this.state.list, this.state.inputValue],
+      /******************/
+      // 下面是代码优化部分
+      // 新版react中setState已经开始接收一个函数作参数了
+      // 这样会让setState的执行处于异步状态，但是会提升性能
+      // 这里的setState传入函数会传入一个prevState参数，这个参数相当于之前的this.state
+      // 所以这里用prevState.xxx也可以替代this.state.xxx的功能，可以防止开发人员误改this.state
+      this.setState((prevState) => ({
+        list: [...prevState.list, prevState.inputValue],
+        inputValue: ""
+      }))
+      // 上面是代码优化部分
+      /******************/
+      // this.setState({
+        // list: [...this.state.list, this.state.inputValue],
         /*
          * 对象中的扩展运算符(...)用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中
          * 参考链接：https://blog.csdn.net/astonishqft/article/details/82899965
         */
-        inputValue: ""
-      })
+        // inputValue: ""
+      // })
     }
 
     handleItemDelete(index){
-      const list = [...this.state.list]
+      // const list = [...this.state.list]
       /*
        * 这里为什么要用扩展运算符(...)？
        * 如果直接赋值，数组是引用类型，只会复制指针
        * 会导致this.state.list的值后面变化之后，forList的值也会变化
       */
-      list.splice(index, 1)
+      // list.splice(index, 1)
       /*
        * 这里为什么不直接操作this.state.list？
        * 涉及到React中immutable(不可改变)的概念
        * state不允许我们做任何的改变，参考链接：https://www.cnblogs.com/3body/p/6224010.html
        * 原因是有利于后续性能优化
       */
-      this.setState({
-        list: list
+      /******************/
+      // 下面是代码优化部分
+      // 新版react中setState已经开始接收一个函数作参数了
+      // 这样会让setState的执行处于异步状态，但是会提升性能
+      // 这里的setState传入函数会传入一个prevState参数，这个参数相当于之前的this.state
+      // 所以这里用prevState.xxx也可以替代this.state.xxx的功能，可以防止开发人员误改this.state
+      this.setState((prevState) => {
+        const list = [...prevState.list]
+        list.splice(index, 1)
+        return {list}
       })
+      // 上面是代码优化部分
+      /******************/
+      // this.setState({
+      //   list: list
+      // })
     }
 }
 
