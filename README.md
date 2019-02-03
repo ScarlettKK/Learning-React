@@ -61,7 +61,7 @@ React框架只负责视图层部分的实现，以及父子组件之间简单的
 
 工欲善其事，必先利其器。下面是react框架开发调试专用的chrome插件--react-developer-tools的介绍与安装使用博客：
 
-[react-developer-tools](https://www.cnblogs.com/Super-scarlett/p/8657572.html)
+[react-developer-tools](https://www.cnblogs.com/luffa/p/10350014.html)
 
 ### props, state与render函数
 
