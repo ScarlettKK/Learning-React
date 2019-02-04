@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+// prop-types能够对父组件传递过来的值（属性）的类型进行校验
+import PropTypes from 'prop-types';
 
 class TodoItem extends Component {
 		constructor(props) {
@@ -8,11 +10,11 @@ class TodoItem extends Component {
     render(){
     	/******************/
     	// 下面是代码优化部分
-    	const {content} = this.props;
+    	const { content, test } = this.props;
     	// 上面是代码优化部分
     	/******************/
     	/* 子组件接受父组件的信息this.props.content */
-    	return <div onClick={this.handleClick}>{content}</div>
+    	return <div onClick={this.handleClick}>{test} - {content}</div>
     }
 
     handleClick(){
@@ -28,6 +30,19 @@ class TodoItem extends Component {
       // 但是这里子组件的this没有handleItemDelete方法，所以会报错
       // 需要将第一个this指向父组件，通过bind方法
     }
+}
+
+// 下面是对父组件传递过来的值（属性）的类型进行【校验】，限制父组件传递过来的值是某一种数据类型
+TodoItem.propTypes = {
+	test: PropTypes.string.isRequired,  //表示这个属性不能不传，不能为空
+	content: PropTypes.arrayOf(PropTypes.number, PropTypes.string), // 表示这个属性既可以是个number【或者】可以是个string
+	handleItemDelete: PropTypes.func,
+	index: PropTypes.number
+}
+
+// 下面是对父组件传递过来的属性进行【默认值设置】
+TodoItem.defaultProps = {
+	test: 'hello world'  //当父组件没有传递该属性的时候，该属性的值赋值为默认值
 }
 
 export default TodoItem;
