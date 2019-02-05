@@ -20,6 +20,7 @@ class TodoList extends Component {
        * 创建TodoList的时候
        * 需要调用一次其父类Component的构造函数
       */
+      // 当组件的state（自带属性）或者props（从父组件传递过来属性）发生改变的时候，Component的render函数就会重新执行，重新渲染页面，我们所看到的页面就会发生改变
       this.state = {
           inputValue: "",
           list: []

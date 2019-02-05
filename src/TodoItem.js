@@ -7,6 +7,7 @@ class TodoItem extends Component {
       super(props);
       this.handleClick = this.handleClick.bind(this);
     }
+    // 当父组件的render函数被运行的时候，它的子组件的render函数都将被重新运行一次
     render(){
     	/******************/
     	// 下面是代码优化部分
