@@ -63,6 +63,10 @@ React框架只负责视图层部分的实现，以及父子组件之间简单的
 
 [react-developer-tools](https://www.cnblogs.com/luffa/p/10350014.html)
 
+### propTypes(类型校验) 与 defaultProps(默认参数值)
+
+见React官方文档[Typechecking With PropTypes](https://reactjs.org/docs/typechecking-with-proptypes.html)
+
 ### props, state与render函数
 
 当组件的state（自带属性）或者props（从父组件传递过来属性）发生改变的时候，Component的render函数就会重新执行，重新渲染页面，我们所看到的页面就会发生改变
