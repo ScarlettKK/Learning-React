@@ -127,13 +127,13 @@ React框架只负责视图层部分的实现，以及父子组件之间简单的
 
 4.生成虚拟DOM（就是一个虚拟对象，用它来描述真实DOM）【js对象->js对象损耗性能小】
 
-{'div', {id: 'abc'}, ['hello world']}
+`{'div', {id: 'abc'}, ['hello world']}`
 
 5.state发生改变
 
 6.数据 + 模版生成新的虚拟DOM【极大地提升了性能】
 
-{'div', {id: 'abc'}, ['cat']}
+`{'div', {id: 'abc'}, ['cat']}`
 
 7.比较原始虚拟DOM和新的虚拟DOM的区别，找到区别是div中的text【极大地提升了性能】
 
