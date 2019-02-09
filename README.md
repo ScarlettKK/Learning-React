@@ -123,21 +123,41 @@ React框架只负责视图层部分的实现，以及父子组件之间简单的
 
 2.JSX模版（render函数）
 
-3.数据 + 模版结合，生成真实的DOM，来显示
+3.生成虚拟DOM（就是一个虚拟对象，用它来描述真实DOM）【js对象->js对象损耗性能小】
 
-4.生成虚拟DOM（就是一个虚拟对象，用它来描述真实DOM）【js对象->js对象损耗性能小】
+	`{'div', {id: 'abc'}, ['hello world']}`
 
-`{'div', {id: 'abc'}, ['hello world']}`
+4.用虚拟DOM生成真实的DOM，来显示
 
 5.state发生改变
 
 6.数据 + 模版生成新的虚拟DOM【极大地提升了性能】
 
-`{'div', {id: 'abc'}, ['cat']}`
+	`{'div', {id: 'abc'}, ['cat']}`
 
 7.比较原始虚拟DOM和新的虚拟DOM的区别，找到区别是div中的text【极大地提升了性能】
 
 8.直接操作DOM，改变div中的内容（只改变更新了的部分，其他保持不变）
+
+
+
+JSX -> creatElement -> 虚拟DOM(JS对象) -> 真实的DOM
+
+使用`React.creatElement('div', {}, React.creatElement(...))`方法进行转化
+
+JSX的存在是为了方便开发人员写代码
+
+#### 优点
+
+1.提升了性能
+
+2.使得跨端应用得以实现（React Native）
+
+	网页应用：JS对象->DOM
+
+	手机应用：JS对象->原生应用的组件
+
+	JS对象是最方便转化的
 
 ### React生命周期函数
 
