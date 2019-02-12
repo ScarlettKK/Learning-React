@@ -36,7 +36,8 @@ class TodoItem extends Component {
 // 下面是对父组件传递过来的值（属性）的类型进行【校验】，限制父组件传递过来的值是某一种数据类型
 TodoItem.propTypes = {
 	test: PropTypes.string.isRequired,  //表示这个属性不能不传，不能为空
-	content: PropTypes.arrayOf(PropTypes.number, PropTypes.string), // 表示这个属性既可以是个number【或者】可以是个string
+  // arrayOf表示content应为一个数组，数组的组成内容可以为数字或者是string
+	content: PropTypes.oneOfType([PropTypes.number, PropTypes.string]), // 表示这个属性可以是个number【或者】可以是个string
 	handleItemDelete: PropTypes.func,
 	index: PropTypes.number
 }

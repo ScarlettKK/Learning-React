@@ -56,6 +56,7 @@ class TodoList extends Component {
               className = "input"
               value={this.state.inputValue}
               onChange={this.handleInputChange}
+              ref={(input)=>{this.input = input}}
             />
             <button 
               onClick={this.handleBtnClick}
@@ -108,13 +109,22 @@ class TodoList extends Component {
     // 上面是代码优化部分
     /******************/
 
-    handleInputChange(event){
+    handleInputChange(){
       /******************/
       // 下面是代码优化部分
       // 新版react中setState已经开始接收一个函数作参数了
       // 这样会让setState的执行处于异步状态，但是会提升性能
       // 当然这时候访问event.target会出现一些问题，所以需要一个变量把当前的event.target值保存起来
-      const value = event.target.value;
+      // const value = event.target.value;
+      /*********** ref(59行) ***********/
+      /* 这里的event.target就是获取当前的DOM元素 */
+      /* 在React中，通过ref，我们也可以获取到指定的DOM元素(ref绑定在哪个上就拿哪个) */
+      /* 当然最好在非必要情况下，不要老是操作DOM */
+      /***** ref的一个坑 *****/
+      /* 当使用ref并同时使用setState的时候，要注意setState是异步的，会导致当前获取到的DOM元素内容还未被更新 */
+      /* 这里需要将对ref的获取放在setState的回调函数里面（setState更新完才调用），才能获取到最新的DOM元素 */
+      /*********** ref(59行) ***********/
+      const value = this.input.value;
       this.setState(() => ({
           inputValue: value
       }))
