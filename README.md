@@ -199,6 +199,12 @@ JSX的存在是为了方便开发人员写代码
 
 初始化过程：初始化数据（props state）getDefaultProps、getInitialState
 
-挂载过程（Mounting）：componentWillMount、render、componentDidMount
+挂载过程（Mounting组件第一次被放到页面的时候）：componentWillMount、render、componentDidMount
+
+更新过程（updating）：shouldComponentUpdate、componentWillUpdate、render、componentDidUpdate
+
+删除组件过程（Unmounting）：componentWillUnmount
+
+生命周期函数是针对每一个组件的，意味着每一个组件都带有这些函数，无论父子。
 
 ### React CSS过渡动画

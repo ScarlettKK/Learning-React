@@ -7,6 +7,25 @@ class TodoItem extends Component {
       super(props);
       this.handleClick = this.handleClick.bind(this);
     }
+    // 当一个组件从父组件接收了参数
+    // 只要父组件的render函数被重新执行了，子组件的这个生命周期函数才会被执行
+    // 如果这个组件第一次存在于父组件中，不会执行---为什么？首次挂载走的是mounting
+    // 这个组件已经存在于父组件之中，才会执行
+    componentWillReceiveProps() {
+      console.log("child componentWillReceiveProps")
+    }
+    // 当这个组件即将从页面移除的时候，会被执行
+    componentWillUnmount() {
+      console.log("child componentWillUnmount")
+    }
+    // 在组件即将被挂载到页面的时刻执行
+    componentWillMount(){
+      console.log("child componentWillMount")
+    }
+    // 在组件被挂载到页面之后执行
+    componentDidMount(){
+      console.log("child componentDidMount")
+    }
     // 当父组件的render函数被运行的时候，它的子组件的render函数都将被重新运行一次
     render(){
     	/******************/
