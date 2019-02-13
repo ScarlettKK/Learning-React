@@ -195,4 +195,10 @@ JSX的存在是为了方便开发人员写代码
 
 ### React生命周期函数
 
+生命周期函数指 在某一个时刻 组件会自动调用执行的函数
+
+初始化过程：初始化数据（props state）getDefaultProps、getInitialState
+
+挂载过程（Mounting）：componentWillMount、render、componentDidMount
+
 ### React CSS过渡动画

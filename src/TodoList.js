@@ -36,6 +36,11 @@ class TodoList extends Component {
       /******************/
     }
 
+    // 在组件即将被挂载到页面的时刻执行
+    componentWillMount(){
+      console.log("componentWillMount")
+    }
+
     render() {
       return (
         /*
