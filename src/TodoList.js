@@ -37,34 +37,34 @@ class TodoList extends Component {
     }
 
     // 在组件即将被挂载到页面的时刻执行
-    componentWillMount(){
-      console.log("componentWillMount")
-    }
+    // componentWillMount(){
+    //   console.log("componentWillMount")
+    // }
 
-    // 在组件被挂载到页面之后执行
-    componentDidMount(){
-      console.log("componentDidMount")
-    }
+    // // 在组件被挂载到页面之后执行
+    // componentDidMount(){
+    //   console.log("componentDidMount")
+    // }
 
-    // 组件更新之前，他会自动执行
-    shouldComponentUpdate(){
-      console.log("shouldComponentUpdate")
-      // 这里返回false的时候，组件不会被更新
-      return true;
-    }
+    // // 组件更新之前，他会自动执行
+    // shouldComponentUpdate(){
+    //   console.log("shouldComponentUpdate")
+    //   // 这里返回false的时候，组件不会被更新
+    //   return true;
+    // }
 
-    // 组件被更新之前，自动执行
-    // 如果shouldComponentUpdate返回false不会被执行
-    componentWillUpdate(){
-      console.log("componentWillUpdate")
-    }
+    // // 组件被更新之前，自动执行
+    // // 如果shouldComponentUpdate返回false不会被执行
+    // componentWillUpdate(){
+    //   console.log("componentWillUpdate")
+    // }
 
-    componentDidUpdate(){
-      console.log("componentDidUpdate")
-    }
+    // componentDidUpdate(){
+    //   console.log("componentDidUpdate")
+    // }
 
     render() {
-      console.log("render")
+      // console.log("render")
       return (
         /*
          * 在JSX中，大写字母开头的都是JSX自定义组件

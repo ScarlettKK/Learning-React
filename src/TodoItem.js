@@ -8,26 +8,40 @@ class TodoItem extends Component {
       this.handleClick = this.handleClick.bind(this);
     }
     // 当一个组件从父组件接收了参数
-    // 只要父组件的render函数被重新执行了，子组件的这个生命周期函数才会被执行
-    // 如果这个组件第一次存在于父组件中，不会执行---为什么？首次挂载走的是mounting
+    // 只有父组件的render函数被重新执行了，子组件的这个生命周期函数才会被执行
+    // 每次父组件render函数被执行的时候，子组件的componentWillReceiveProps都会被执行
+    // 如果这个组件第一次存在于父组件中，不会执行
+    // ---为什么？子组件第一次存在，走的是挂载过程，不会调用componentWillReceiveProps（Mounting过程不含这个函数）
+    // 当子组件已经存在于父组件之中的时候，走的才是更新过程，才会涉及到componentWillReceiveProps
     // 这个组件已经存在于父组件之中，才会执行
-    componentWillReceiveProps() {
-      console.log("child componentWillReceiveProps")
-    }
-    // 当这个组件即将从页面移除的时候，会被执行
-    componentWillUnmount() {
-      console.log("child componentWillUnmount")
-    }
-    // 在组件即将被挂载到页面的时刻执行
-    componentWillMount(){
-      console.log("child componentWillMount")
-    }
-    // 在组件被挂载到页面之后执行
-    componentDidMount(){
-      console.log("child componentDidMount")
+    // componentWillReceiveProps() {
+    //   console.log("child componentWillReceiveProps")
+    // }
+    // // 当这个组件即将从页面移除的时候，会被执行
+    // componentWillUnmount() {
+    //   console.log("child componentWillUnmount")
+    // }
+    // // 在组件即将被挂载到页面的时刻执行
+    // componentWillMount(){
+    //   console.log("child componentWillMount")
+    // }
+    // // 在组件被挂载到页面之后执行
+    // componentDidMount(){
+    //   console.log("child componentDidMount")
+    // }
+    shouldComponentUpdate(nextProps, nextState){
+      // 此函数可以传入两个参数，即下一个要被更新的状态
+      // 我的下一个要被更新的props是什么？下一个即将被更新的state是什么？
+      if(nextProps.content !== this.props.content)
+        return true; // 说明子组件参数被更新了，需要更新子组件
+      return false;
     }
     // 当父组件的render函数被运行的时候，它的子组件的render函数都将被重新运行一次
+    // 但其实在某些情况下这样是很耗费性能的
+    // 所以这里可以用到shouldComponentUpdate来帮组判断是否要更新子组件
+    // 也就是说，返回为false的时候，子组件只有第一次被挂载的过程，后续父组件的更新与它无关，提升了性能
     render(){
+      console.log("child render")
     	/******************/
     	// 下面是代码优化部分
     	const { content, test } = this.props;

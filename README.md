@@ -201,10 +201,16 @@ JSX的存在是为了方便开发人员写代码
 
 挂载过程（Mounting组件第一次被放到页面的时候）：componentWillMount、render、componentDidMount
 
-更新过程（updating）：shouldComponentUpdate、componentWillUpdate、render、componentDidUpdate
+更新过程（updating）：componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、render、componentDidUpdate
 
 删除组件过程（Unmounting）：componentWillUnmount
 
-生命周期函数是针对每一个组件的，意味着每一个组件都带有这些函数，无论父子。
+生命周期函数是针对每一个组件的，意味着每一个组件都带有这些生命周期函数，无论父子。
+
+一个组件中必须带有render函数，其他生命周期函数可以没有。为什么？
+
+	React中所有的组件都继承自Component对象，Component中自带有其他生命周期函数，唯独render没有被自带，所以render必须在组件中定义。
+
+
 
 ### React CSS过渡动画
