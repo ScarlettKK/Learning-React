@@ -212,5 +212,14 @@ JSX的存在是为了方便开发人员写代码
 	React中所有的组件都继承自Component对象，Component中自带有其他生命周期函数，唯独render没有被自带，所以render必须在组件中定义。
 
 
+### (小结)React如何优化性能？
+
+1. 在constructor中绑定所有函数的指向
+
+2. 将setState设置为异步函数，合并多次对state的改变
+
+3. 虚拟DOM，同层比对，key值
+
+4. shouldComponentUpdate
 
 ### React CSS过渡动画

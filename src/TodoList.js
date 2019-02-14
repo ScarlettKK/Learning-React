@@ -12,6 +12,9 @@ import TodoItem from './TodoItem'
 import './style.css';
 // 上面是代码优化部分
 /******************/
+// 在React中引入AJAX
+// 安装流程：npm install axios
+import axios from 'axios'
 
 class TodoList extends Component {
     constructor(props) {
@@ -28,6 +31,7 @@ class TodoList extends Component {
       /******************/
       // 下面是代码优化部分
       // 提前bind好所有函数的this指向，后面不需要重复bind
+      // 把作用域的绑定放在constructor中做，可以保证在整个程序里面函数的作用域绑定只会执行一次，避免了子组件的一些无谓渲染
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleBtnClick = this.handleBtnClick.bind(this);
       this.handleItemDelete = this.handleItemDelete.bind(this);
@@ -41,10 +45,24 @@ class TodoList extends Component {
     //   console.log("componentWillMount")
     // }
 
-    // // 在组件被挂载到页面之后执行
-    // componentDidMount(){
-    //   console.log("componentDidMount")
-    // }
+    // 在组件被挂载到页面之后执行
+    componentDidMount(){
+      // 此生命周期函数作用（应用场景）
+      // 前端向后台发送AJAX请求获取数据
+      // AJAX的请求就要放在componentDidMount中
+      // 此生命周期函数只会在组件中被执行一次
+      console.log("componentDidMount")
+      // 为什么AJAX不放在render中？
+      // render函数在整个生命周期中会被多次执行，特别是state中的数据一改变render就会被重新执行
+      // 所以AJAX放在render中是不合理的，也会造成死循环
+      // 那为什么不放在componentWillMount中呢？
+      // 做ReactNative的时候可能会跟一些更高层的技术产生冲突
+      // 其实AJAX放在constructor中也是可以的，但不够规范
+      // AJAX请求示例
+      axios.get('/api/list').then(
+        ()=>{console.log("yes")}
+      )
+    }
 
     // // 组件更新之前，他会自动执行
     // shouldComponentUpdate(){
