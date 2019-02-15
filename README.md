@@ -222,4 +222,14 @@ JSX的存在是为了方便开发人员写代码
 
 4. shouldComponentUpdate
 
+### （小插件）使用Charles实现本地数据Mock
+
+[Charles教程](https://www.cnblogs.com/jiayuchn-test/p/8875105.html)
+
+[注意！]启动 Charles 后，第一次 Charles 会询问你是否要把Charles设置为系统的代理，如果此时你忽略了这个询问窗口，你可以在后期再进行设置；
+
+将 Charles 设置成系统代理：选择菜单中的 “Proxy” -> “Mac OS X Proxy/windows proxy”，如果Mac下有管理密码，则需要输入密码后方可进行。
+
+然后再点击Tools->Map Local进行本地文件服务器代理设置
+
 ### React CSS过渡动画

@@ -60,7 +60,10 @@ class TodoList extends Component {
       // 其实AJAX放在constructor中也是可以的，但不够规范
       // AJAX请求示例
       axios.get('/api/list').then(
-        ()=>{console.log("yes")}
+        (res)=>{
+          console.log(res.data)
+          this.setState(() => ({list: [...res.data]}))
+        }
       )
     }
 
