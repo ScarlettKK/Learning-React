@@ -4,9 +4,10 @@ import React from 'react';
  * 针对JSX语法，编译成虚拟DOM
 */
 import ReactDOM from 'react-dom';
-import TodoList from './TodoList';
+// import TodoList from './TodoList';
+import App from './App';
 
-ReactDOM.render(<TodoList />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
 /*
  * import * as serviceWorker from './serviceWorker';
