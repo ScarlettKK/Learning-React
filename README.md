@@ -239,3 +239,16 @@ JSX的存在是为了方便开发人员写代码
 <img src="https://img2018.cnblogs.com/blog/1147701/201902/1147701-20190215225304032-532317280.jpg" width="500px">
 
 ### React CSS过渡动画
+
+实现方法：
+
+1. css transition
+
+2. css animation + keyframes
+
+3. react-transition-group
+	
+	这里主要涉及到[CSSTransition](https://reactcommunity.org/react-transition-group/css-transition)，另外[transition](https://reactcommunity.org/react-transition-group/transition)部分的实现要比CSSTransition更为底层一些，如果遇到了CSSTransition不能实现的效果可以借助transition
+
+	并且react-transition-group向我们提供了一些钩子函数，借助这些函数我们可以完成一些特定的功能
+

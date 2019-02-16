@@ -1,38 +1,27 @@
-.show {
-	animation: show-item 2s linear forwards;
-	/* forwards参数可以让动画效果在完成后，一直保持在100%的状态 */
+.fade-enter, .fade-appear {
+	/* 入场动画进入时刻 */
+	opacity: 0;
+}
+.fade-enter-active, .fade-appear-active {
+	/* 入场动画执行中 */
+	opacity: 1;
+	transition: opacity 1s linear;
+}
+.fade-enter-done {
+	/* 入场动画执行完成 */
+	opacity: 1;
 }
 
-.hide {
-	animation: hide-item 2s linear forwards;
+.fade-exit {
+	/* 出场动画进入时刻 */
+	opacity: 1;
 }
-
-@keyframes show-item {
-	0% {
-		opacity: 0;
-		color: red;
-	}
-	50% {
-		opacity: 0.5;
-		color: green;
-	}
-	100% {
-		opacity: 1;
-		color: blue;
-	}
+.fade-exit-active {
+	/* 出场动画执行中 */
+	opacity: 0;
+	transition: opacity 1s linear;
 }
-
-@keyframes hide-item {
-	0% {
-		opacity: 1;
-		color: blue;
-	}
-	50% {
-		opacity: 0.5;
-		color: green;
-	}
-	100% {
-		opacity: 0;
-		color: red;
-	}
+.fade-exit-done {
+	/* 出场动画执行完成 */
+	opacity: 0;
 }
