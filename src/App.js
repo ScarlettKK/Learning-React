@@ -16,6 +16,8 @@ class App extends Component {
 		return (
 			<Fragment>
 				<TransitionGroup>
+					{/* TransitionGroup 配合 CSSTransition 来使用，
+						可以达到同时控制多个 CSSTransition 的效果 */}
 					{
 						this.state.list.map((item, index) => {
 							return (
