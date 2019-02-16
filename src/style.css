@@ -1,9 +1,38 @@
 .show {
-	opacity: 1;
-	transition: opacity 0.5s linear;
+	animation: show-item 2s linear forwards;
+	/* forwards参数可以让动画效果在完成后，一直保持在100%的状态 */
 }
 
 .hide {
-	opacity: 0;
-	transition: opacity 0.5s linear;
+	animation: hide-item 2s linear forwards;
+}
+
+@keyframes show-item {
+	0% {
+		opacity: 0;
+		color: red;
+	}
+	50% {
+		opacity: 0.5;
+		color: green;
+	}
+	100% {
+		opacity: 1;
+		color: blue;
+	}
+}
+
+@keyframes hide-item {
+	0% {
+		opacity: 1;
+		color: blue;
+	}
+	50% {
+		opacity: 0.5;
+		color: green;
+	}
+	100% {
+		opacity: 0;
+		color: red;
+	}
 }
