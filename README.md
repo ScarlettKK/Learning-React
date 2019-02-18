@@ -252,6 +252,8 @@ JSX的存在是为了方便开发人员写代码
 
 	并且react-transition-group向我们提供了一些钩子函数，借助这些函数我们可以完成一些特定的功能
 
+	[TransitionGroup](https://reactcommunity.org/react-transition-group/transition-group) 配合 CSSTransition 来使用，可以达到同时控制多个 CSSTransition 的效果
+
 ## Redux
 
 如上所述， React框架只负责视图层部分的实现，以及父子组件之间简单的通信
