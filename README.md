@@ -269,3 +269,9 @@ Redux原理：
 Redux = Reducer + Flux
 
 Flux：Redux的雏形，但不是很好用，存在数据依赖等问题，Redux是它的升级版
+
+### Redux Flow
+
+工作原理：
+
+<img src="https://img2018.cnblogs.com/blog/1147701/201902/1147701-20190218211708195-665575091.png">
