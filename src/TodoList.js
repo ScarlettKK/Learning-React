@@ -29,8 +29,9 @@ class TodoList extends Component {
             style={{width:'500px', margin:'10px'}}
             bordered
             dataSource={this.state.list}
-            renderItem={item => (<List.Item>{item}</List.Item>)}
+            renderItem={(item, index) => (<List.Item onClick={this.handleDeleteItem.bind(this, index)}>{item}</List.Item>)}
           />
+          {/* renderItem这里可以传入index参数，方便我们后续操作 */}
         </div>
       )
     }
@@ -50,6 +51,14 @@ class TodoList extends Component {
     handleBtnClick() {
       const action = {
         type: 'add_todo_item'
+      }// 创建一个 action（借书的那句话）
+      store.dispatch(action) // 将要借书的这句话传递给store，store会转发给reducer
+    }
+
+    handleDeleteItem(index){
+      const action = {
+        type: 'delete_todo_item',
+        index
       }// 创建一个 action（借书的那句话）
       store.dispatch(action) // 将要借书的这句话传递给store，store会转发给reducer
     }

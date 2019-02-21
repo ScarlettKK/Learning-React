@@ -18,6 +18,11 @@ export default (state = defaultState, action) => {
 		newState.inputValue = '';
 		return newState;// 最后返回
 	}
+	if(action.type === 'delete_todo_item') {
+		const newState = JSON.parse(JSON.stringify(state)); //深拷贝的骚操作
+		newState.list.splice(action.index, 1)
+		return newState;// 最后返回
+	}
 	return state;
 	// state：整个store仓库里面存储的数据
 }
