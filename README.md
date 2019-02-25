@@ -270,11 +270,31 @@ Redux = Reducer + Flux
 
 Flux：Redux的雏形，但不是很好用，存在数据依赖等问题，Redux是它的升级版
 
-### Redux Flow
+### Redux Work Flow
 
 工作原理：
 
 <img src="https://img2018.cnblogs.com/blog/1147701/201902/1147701-20190218211708195-665575091.png">
+
+### Redux 知识点复习
+
+#### Redux 使用原则
+
+1. store 必须是唯一的，整个项目都用这一个store公共存储空间
+
+2. 只有store能够改变自己的内容（state），reducer是不能直接修改store的state的，只能去return一个newState，然后让store自己去改
+
+3. reducer必须是纯函数，也就是说给定固定的输入，就一定会有固定的输出（不纯函数如：给某输出变量赋值new Date()、或者带有AJAX请求），而且不会有任何副作用（如对接收的参数state作了修改）
+
+#### Redux核心API
+
+1. createStore 创建一个store
+
+2. store.dispatch 向store传递一个action
+
+3. store.getState 获取store当前的state
+
+4. store.subscribe 订阅store的改变
 
 ## Ant Design
 
