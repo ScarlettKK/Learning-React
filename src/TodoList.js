@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css'; 
-import { Input, Button, List } from 'antd';
 import store from './store/index'
 import {getInputChangeAction,getAddItemAction,getDeleteItemAction} from './store/actionCreaters'
 //import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes'
+import TodoListUI from './TodoListUI'
 
+// 下面的组件写法是将UI与逻辑放在一起，这样是比较混乱的，维护起来也比较困难
+// Redux进阶：对组件进行一个拆分，UI组件专门做视图的渲染，容器组件处理逻辑
+// 下面就变成了一个容器组件（聪明组件），只管逻辑，不管页面长啥样
 class TodoList extends Component {
     constructor(props){
       super(props)
@@ -12,30 +15,20 @@ class TodoList extends Component {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleStoreChange = this.handleStoreChange.bind(this);
       this.handleBtnClick = this.handleBtnClick.bind(this);
+      this.handleDeleteItem = this.handleDeleteItem.bind(this);
       store.subscribe(this.handleStoreChange)
       //这里需要订阅store的改变，这样reducer的state改变之后才会更新到组件
       //store一旦改变就会调用this.handleStoreChange方法
     }
     
     render() {
-      return (
-        <div>
-          <Input 
-            value={this.state.inputValue} 
-            placeholder="Todo Info" 
-            style={{width:'300px', margin:'10px'}}
-            onChange={this.handleInputChange}
-          />
-          <Button type="primary" onClick={this.handleBtnClick}>Submit</Button>
-          <List
-            style={{width:'500px', margin:'10px'}}
-            bordered
-            dataSource={this.state.list}
-            renderItem={(item, index) => (<List.Item onClick={this.handleDeleteItem.bind(this, index)}>{item}</List.Item>)}
-          />
-          {/* renderItem这里可以传入index参数，方便我们后续操作 */}
-        </div>
-      )
+      return <TodoListUI 
+              inputValue={this.state.inputValue} 
+              handleInputChange={this.handleInputChange}
+              handleBtnClick={this.handleBtnClick} 
+              list={this.state.list}
+              handleDeleteItem={this.handleDeleteItem}
+             />
     }
 
     handleInputChange(e) {
