@@ -5,7 +5,7 @@ import {getInputChangeAction,getAddItemAction,getDeleteItemAction} from './store
 //import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes'
 import TodoListUI from './TodoListUI'
 
-// 下面的组件写法是将UI与逻辑放在一起，这样是比较混乱的，维护起来也比较困难
+// 下面的组件（之前所写的普通组件）写法是将UI与逻辑放在一起，这样是比较混乱的，维护起来也比较困难
 // Redux进阶：对组件进行一个拆分，UI组件专门做视图的渲染，容器组件处理逻辑
 // 下面就变成了一个容器组件（聪明组件），只管逻辑，不管页面长啥样
 class TodoList extends Component {
