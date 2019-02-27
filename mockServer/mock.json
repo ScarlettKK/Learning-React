@@ -1,0 +1,19 @@
+[
+  {
+	  "request" :
+	  {
+	  	"method" : "get",
+	  	"uri" : "/list.json"
+	  },
+	  "response" :
+	  {
+	  	"headers" :
+        {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods":"PUT,POST,GET,DELETE,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type,Content-Length, Authorization, Accept,X-Requested-With"
+        },
+	  	"json" : ["test1", "test2", "test3"]
+	  }
+	}
+]
