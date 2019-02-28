@@ -22,8 +22,9 @@ const TodoListUI = (props) => {
             style={{width:'500px', margin:'10px'}}
             bordered
             dataSource={props.list}
-            renderItem={(item, index) => (<List.Item onClick={(index)=>{props.handleDeleteItem(index)}}>{item}</List.Item>)}
+            renderItem={(item, index) => (<List.Item onClick={()=>{props.handleDeleteItem(index)}}>{item}</List.Item>)}
           />
+          {/* ！！！注意onClick方法这里并不会接收到index，所以这里25行去掉了onClick的index参数，直接在函数里面使用index即可！！！ */}
           {/* 当我们想传递父组件的方法【这里注意是传递函数，不是调用函数】，但同时又要向这个方法传递参数，不能用bind，怎么办？外面包一层函数，接收参数，直接在该函数里面去调用父组件的方法【见20行】 */}
           {/* renderItem这里可以传入index参数，方便我们后续操作 */}
         </div>
