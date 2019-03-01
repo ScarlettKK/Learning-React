@@ -301,3 +301,10 @@ Flux：Redux的雏形，但不是很好用，存在数据依赖等问题，Redux
 [Ant Design](https://ant.design/index-cn)是蚂蚁金服开发的一款开源样式框架
 
 更加适用于后端管理界面的开发
+
+## Redux 中间件
+
+原理：
+
+
+<img src="https://img2018.cnblogs.com/blog/1147701/201903/1147701-20190301222737304-1175233829.png">
