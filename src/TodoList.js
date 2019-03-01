@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css'; 
 import store from './store/index'
-import {getInputChangeAction,getAddItemAction,getDeleteItemAction,getTodoList} from './store/actionCreaters'
+import {getInputChangeAction,getAddItemAction,getDeleteItemAction,getInitList} from './store/actionCreaters'
 //import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes'
 import TodoListUI from './TodoListUI'
 // import axios from 'axios'
@@ -33,6 +33,8 @@ class TodoList extends Component {
     }
 
     componentDidMount() {
+      const action = getInitList();
+      store.dispatch(action);
       // 这里由于charles实在抽风，用Moco搭建了一个mock server，具体教程：https://www.cnblogs.com/luffa/p/10389151.html
       // charles 把这里所描述的方案：https://www.jianshu.com/p/2cfef11edebb 都试了一遍，实在是都不可行，所以才用了Moco，期待以后有更好的解决方案
       // axios.get('http://localhost:8889/list.json').then((res) => {
@@ -40,8 +42,8 @@ class TodoList extends Component {
       //   const action = initListItems(data)
       //   store.dispatch(action)
       // })
-      const action = getTodoList();
-      store.dispatch(action)
+      // const action = getTodoList();
+      // store.dispatch(action)
       // 当action是一个函数的时候（有redux-thunk插件），我们dispatch这个action的时候，这个action就会被自动执行，并且store会给这个action函数自动传入参数，参数为store.dispatch方法
       // 把复杂的函数功能（如AJAX请求）都放在组件的生命周期函数里面，会导致组件功能代码越来越多越来越复杂，应该把复杂的业务逻辑进行拆分，交给别的部分去进行管理
       // 自动化测试方面，测试actionCreaters的一个方法，要比测试一个组件的生命周期容易得多
