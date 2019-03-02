@@ -6,8 +6,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TodoList from './TodoList';
 // import App from './App';
+import { Provider } from 'react-redux' // 帮助我们把store提供给内部的组件
+// react-redux 的引入使得我们可以更方便地使用 redux
+import store from './store'
 
-ReactDOM.render(<TodoList />, document.getElementById('root'));
+const App = (
+	<Provider store = {store}> {/* 这个提供器可以连到store，那么这个Provider里面所有的组件都有能力可以获取到store里面的内容 */}
+		<TodoList />
+	</Provider>
+)
+
+ReactDOM.render(App, document.getElementById('root'));
 
 /*
  * import * as serviceWorker from './serviceWorker';
