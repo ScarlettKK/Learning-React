@@ -4,11 +4,11 @@ import React from 'react';
  * 针对JSX语法，编译成虚拟DOM
 */
 import ReactDOM from 'react-dom';
-import TodoList from './TodoList';
+import TodoList from './LearningPart/LearningPart4/TodoList';// 可以根据想要显示的learning part切换文件夹
 // import App from './App';
 import { Provider } from 'react-redux' // 帮助我们把store提供给内部的组件
 // react-redux 的引入使得我们可以更方便地使用 redux
-import store from './store'
+import store from './LearningPart/LearningPart4/store'// 可以根据想要显示的learning part切换文件夹
 
 const App = (
 	<Provider store = {store}> {/* 这个提供器可以连到store，那么这个Provider里面所有的组件都有能力可以获取到store里面的内容 */}
