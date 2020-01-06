@@ -311,3 +311,38 @@ Flux：Redux的雏形，但不是很好用，存在数据依赖等问题，Redux
 举例：
 
 <img src="https://img2018.cnblogs.com/blog/1147701/201903/1147701-20190301223926506-784867368.png">
+
+
+# React 再次学习
+
+[参考学习路径](https://blog.csdn.net/yangxiaobo118/article/details/79823561)
+
+基本内容：
+
+1、React ☑️
+
+2、npm ☑️
+
+3、JavaScript 打包工具 ☑️
+
+4、ES6 ☑️
+
+5、路由
+
+6、Flux
+
+进阶话题：
+
+1、内联样式
+
+2、服务端渲染
+
+3、Immutable.js
+
+4、Relay, Falcor等
+
+
+
+
+
+
