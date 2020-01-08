@@ -332,6 +332,8 @@ Flux：Redux的雏形，但不是很好用，存在数据依赖等问题，Redux
 5、路由
 
 	react-router
+	参考链接:  http://react-guide.github.io/react-router-cn/docs/Introduction.html
+	         https://segmentfault.com/a/1190000019417798?utm_source=tag-newest
 
 6、Flux Redux react-redux
 	
