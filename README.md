@@ -360,7 +360,7 @@ Flux：Redux的雏形，但不是很好用，存在数据依赖等问题，Redux
 
 	这些技术可以帮你减少 AJAX 请求数, 它们仍然是非常前沿的, 所以如果你没有遇到过多 AJAX 请求的问题, 就不需要用到 Relay 或者 Falcor.
 
-
+5、typescript
 
 
 
