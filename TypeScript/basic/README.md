@@ -169,3 +169,58 @@ let num: number = u;
 ```
 
 #### Symbol
+
+多用于创建 对象 中 key:value 中的 `key` 值
+
+这样当在同一个对象中创建两个'相同'值的key时, 它们不会互相影响
+
+<img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gbmrqawe7ij30vy0esqf1.jpg">
+
+<img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gbmse9ufh0j30vg0gigv7.jpg">
+
+<img src="https://tva1.sinaimg.cn/large/006tNbRwgy1gbmsfvlh0ej30vg08mwit.jpg">
+
+`应用场景1：使用Symbol来作为对象属性名(key)`
+
+```javascript
+let id1 = Symbol('id');
+let id2 = Symbol('id');
+
+var obj = {
+	[id1] : 1
+}
+// {Symbol(id): 1}
+
+obj[id2] = 2; // {Symbol(id): 1, Symbol(id): 2}
+
+obj[id2] = 3; // {Symbol(id): 1, Symbol(id): 3}
+
+// obj[id1] 1
+// obj[id2] 3
+```
+
+`应用场景2：使用Symbol来替代常量const`
+
+我们经常定义一组常量来代表一种业务逻辑下的几个不同类型，我们通常希望这几个常量之间是唯一的关系，为了保证这一点，我们需要为常量赋一个唯一的值.
+
+有的时候这个唯一的值是没有意义的,仅用于标注不同的变量.
+
+常量少的时候还算好，但是常量一多，你可能还得花点脑子好好为他们取个好点的名字.
+
+现在有了Symbol，我们大可不必这么麻烦了：
+
+```javascript
+const TYPE_AUDIO = Symbol()
+const TYPE_VIDEO = Symbol()
+const TYPE_IMAGE = Symbol()
+```
+
+这样定义，直接就保证了三个常量的值是唯一的了！是不是挺方便的呢.
+
+`应用场景3：使用Symbol定义类的私有属性/方法`
+
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbnqxaq5nij30vu0nkgp2.jpg">
+
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbnr54dww2j30vg0iidrw.jpg">
+
+
