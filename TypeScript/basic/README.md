@@ -223,4 +223,92 @@ const TYPE_IMAGE = Symbol()
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbnr54dww2j30vg0iidrw.jpg">
 
+### 任意值
+
+任意值（Any）用来表示允许赋值为任意类型。
+
+如果是一个普通类型，在赋值过程中改变类型是不被允许的：
+
+```typescript
+let myFavoriteNumber: string = 'seven';
+myFavoriteNumber = 7;
+
+// 报错 index.ts(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
+```
+
+但如果是 any 类型，则允许被赋值为任意类型, 也就是可以随时更改变量的类型, 给它赋上不同的值
+
+****疑惑片段****
+
+在任意值上访问任何属性都是允许的：
+
+```typescript
+let anyThing: any = 'hello';
+console.log(anyThing.myName);
+console.log(anyThing.myName.firstName);
+```
+
+也允许调用任何方法：
+
+```typescript
+let anyThing: any = 'Tom';
+anyThing.setName('Jerry');
+anyThing.setName('Jerry').sayHello();
+anyThing.myName.setFirstName('Cat');
+```
+
+可以认为，声明一个变量为任意值之后，对它的任何操作，返回的内容的类型都是任意值。
+
+其他类型不允许吗? setName是自带的方法?
+
+****疑惑片段****
+
+变量如果在声明的时候，未指定其类型，那么它会被识别为任意值类型：
+
+```typescript
+let something;
+something = 'seven';
+something = 7;
+
+something.setName('Tom');
+```
+
+等价于:
+
+```typescript
+let something: any;
+something = 'seven';
+something = 7;
+
+something.setName('Tom');
+```
+
+也就是说,在ts中按照js的方式来声明变量(并且声明的同时没有给它赋值),这个变量就是默认为any类型
+
+### 类型推论
+
+如果没有明确的指定类型，那么 TypeScript 会依照类型推论（Type Inference）的规则推断出一个类型。
+
+以下代码虽然没有指定类型，但是会在编译的时候报错：
+
+```typescript
+let myFavoriteNumber = 'seven';
+myFavoriteNumber = 7;
+
+// 报错 index.ts(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
+```
+
+因为其等价于:
+
+```typescript
+let myFavoriteNumber: string = 'seven';
+myFavoriteNumber = 7;
+
+// 报错 index.ts(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
+```
+
+TypeScript 会在没有明确的指定类型的时候推测出一个类型，这就是类型推论。(条件是声明变量的同时给这个变量赋值了)
+
+`如果定义的时候没有赋值，不管之后有没有赋值，都会被推断成 any 类型而完全不被类型检查`
+
 
