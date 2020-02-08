@@ -1,0 +1,28 @@
+{
+  "name": "client-side",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode=development --config ./build/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --mode=production --config ./build/webpack.config.js"
+  },
+  "keywords": [
+    "typescript",
+    "client"
+  ],
+  "author": "ScarlettKK",
+  "license": "MIT",
+  "dependencies": {
+    "cross-env": "^7.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}

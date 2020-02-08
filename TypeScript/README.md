@@ -12,6 +12,8 @@ TypeScript 编译工具可以运行在任何服务器和任何系统上。
 
 TypeScript 是开源的。
 
+TypeScript 最主要的亮点是它的类型系统，这使得在编写代码的时候就能够检测到一些错误。
+
 ## why TypeScript?
 
 TypeScript 增加了代码的可读性和可维护性
