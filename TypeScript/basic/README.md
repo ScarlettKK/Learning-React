@@ -1,6 +1,6 @@
 #TS basic
 
-参考链接:https://ts.xcatliu.com/basics
+参考链接: https://ts.xcatliu.com/basics
 
 ## 数据类型
 
