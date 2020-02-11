@@ -362,23 +362,244 @@ console.log(Symbol.keyFor(sym)); // 'lison'
 
 `ES6 提供了 11 个内置的 Symbol 值`，指向 JS 内部使用的属性和方法。
 
+可以理解为, ES6 提供了 11 个内置的 值, 并把这些值存在了 Symbol 上, 这些值与 JS 内部使用的属性和方法同名(大多与对象数组有关)
+
 这些内置的 Symbol 值就是保存在 Symbol 上的，你可以把Symbol.xxx看做一个 symbol 值。
 
-Symbol.hasInstance
+**Symbol.hasInstance**
 
-Symbol.isConcatSpreadable
+	对象的 Symbol.hasInstance 指向一个内部方法，
+	当你 给一个对象A设置 以 Symbol.hasInstance 为属性名 的方法B 后，
+	当 其他对象C 使用 instanceof 判断 是否为这个对象A的实例 时，
+	会自动调用你定义的这个方法B，
+	参数是其他的这个对象C
 
-Symbol.species
+```
+const objA = {
+  [Symbol.hasInstance](otherObjC) { // function B 
+    console.log(otherObjC);
+  }
+};
+console.log({ a: "a" } instanceof objA); // false
+// 注意：在TypeScript中这会报错，"instanceof" 表达式的右侧必须属于类型 "any"，或属于可分配给 "Function" 接口类型的类型。
+// 是要求你instanceof操作符右侧的值只能是 构造函数或 者 类，或者类型是 any类型。这里你可以使用类型断言，将obj改为obj as any
+```
 
-Symbol.match、Symbol.replace、Symbol.search 和 Symbol.split
+	可以看到当我们使用 instanceof 判断{ a: ‘a’ }是否是 obj 创建的实例的时候，Symbol.hasInstance 这个方法被调用了。
 
-Symbol.iterator
+**Symbol.isConcatSpreadable**
 
-Symbol.toPrimitive
+	这个值是一个可读写布尔值，其值默认是undefined，
+	当一个 **数组** 的 Symbol.isConcatSpreadable 设为 true 或者 为默认的undefined 时，
+	这个数组 在 数组自带的 concat 方法中 会被扁平化
+	但如果 Symbol.isConcatSpreadable 设为 false
+	这个数组 在 数组自带的 concat 方法中 不会被扁平化
 
-Symbol.toStringTag
+```javascript
+// 正常操作
+let arr = [1, 2];
+console.log([].concat(arr, [3, 4])); // 打印结果为[1, 2, 3, 4]，length为4
 
-Symbol.unscopables
+// 设置isConcatSpreadable后
+let arr1 = ["a", "b"];
+console.log(arr1[Symbol.isConcatSpreadable]); // undefined
+arr1[Symbol.isConcatSpreadable] = false;
+console.log(arr1[Symbol.isConcatSpreadable]); // false
+console.log([].concat(arr1, [3, 4])); 
+
+// 打印结果如下：
+/*
+ [ ["a", "b", Symbol(Symbol.isConcatSpreadable): false], 3, 4 ]
+ 最外层这个数组有三个元素，
+ 第一个是一个数组，因为我们设置了arr1[Symbol.isConcatSpreadable] = false
+ 所以第一个这个数组没有被扁平化(没有被展开)，
+
+ 第一个元素这个数组看似是有三个元素，但你在控制台可以看到这个数组的length为2
+ 因为Symbol(Symbol.isConcatSpreadable): false不是他的元素，而是他的属性，
+ 我们知道数组也是对象，所以我们可以给数组设置属性
+ 但属性不会被算在数组长度中
+
+ 你可以试试如下代码，然后看下打印出来的效果：
+  let arr = [1, 2]
+  arr.props = 'value'
+  console.log(arr) // [1, 2, props: "value"]
+  且 arr.length 为 2
+ */
+```
+
+**Symbol.species**
+
+	假设 C是对象B的一个实例
+	让 由实例C衍生出来的实例A
+	只是B的实例, 而不是同为BC的实例
+
+
+```javascript
+// 首先我们使用 class 定义一个类 C，
+// 使用 extends 继承原生构造函数 Array，
+// 那么类 C 创建的实例就能继承所有 Array 原型对象上的方法，比如 map、filter 等
+
+class C extends Array {
+  getName() {
+    return "lison";
+  }
+}
+const c = new C(1, 2, 3);
+const a = c.map(item => item + 1);
+console.log(a); // [2, 3, 4]
+console.log(a instanceof C); // true
+console.log(a instanceof Array); // true
+console.log(a.getName()); // "lison"
+```
+
+	这个例子中，a 是由 c 通过 map 方法衍生出来的，
+	我们也看到了，a 既是 C 的实例，也是 Array 的实例。
+	但是如果我们想只让衍生的数组是 Array 的实例，就需要用 Symbol.species
+
+```javascript
+class C extends Array {
+  // 使用 Symbol.species
+  static get [Symbol.species]() {
+    return Array;
+  }
+  getName() {
+    return "lison";
+  }
+}
+const c = new C(1, 2, 3);
+const a = c.map(item => item + 1); // 此时自动调用Symbol.species命名的方法
+console.log(a); // [2, 3, 4]
+console.log(a instanceof C); // false
+console.log(a instanceof Array); // true
+console.log(a.getName()); // error a.getName is not a function
+```
+
+	就是给类 C 定义一个静态 get 存取器方法(访问实例时调用)，方法名为 Symbol.species，
+	然后在这个方法中返回要构造衍生数组的构造函数。
+	所以最后我们看到，a instanceof C为 false，也就是 a 不再是 C 的实例，也无法调用继承自 C 的方法。
+
+**Symbol.match、Symbol.replace、Symbol.search 和 Symbol.split**
+
+	这个 Symbol.match 值指向一个内部方法，当在字符串 str 上调用 match 方法时，会自动调用这个方法
+
+```javascript
+let obj = {
+  [Symbol.match](string) {
+    return string.length;
+  }
+};
+console.log("abcde".match(obj)); // 5
+```
+
+	相同的还有 Symbol.replace、Symbol.search 和 Symbol.split，使用方法和 Symbol.match 是一样的。
+
+**Symbol.iterator**
+
+	数组的 Symbol.iterator 属性指向该数组的默认遍历器方法：
+
+```javascript
+const arr = [1, 2, 3];
+const iterator = arr[Symbol.iterator]();
+console.log(iterator);           // Array Iterator {}
+console.log(iterator.next());    // {value: 1, done: false}
+console.log(iterator.next());    // {value: 2, done: false}
+console.log(iterator.next());    // {value: 3, done: false}
+console.log(iterator.next());    // {value: undefined, done: true}
+```
+
+	这个 Symbol.iterator 方法是可写的，我们可以自定义遍历器方法。
+
+**Symbol.toPrimitive**
+
+	对象的这个属性指向一个方法，
+	当这个 对象 被转为 原始类型值(string,number等) 时会自动调用这个方法，
+	也就是对象发生类型转换 (为原始类型值) 的时候调用
+	这个方法有一个参数，是这个对象被转为的类型(目标类型)
+
+```javascript
+let obj = {
+  [Symbol.toPrimitive](type) {
+    console.log(type);
+  }
+};
+// const b = obj++      // number
+const a = `abc${obj}`;  // string
+```
+
+**Symbol.toStringTag**
+
+	Symbol.toStringTag 和 Symbol.toPrimitive 相似，
+	对象的这个属性的值可以是一个字符串，也可以是一个存取器 get 方法，
+	当在对象上调用 toString 方法时自动调用这个方法，
+	返回值将作为"[object xxx]"中 xxx 这个值(之前的返回值是[object object])
+
+```javascript
+// 值为字符串
+let obj = {
+  [Symbol.toStringTag]: "lison"
+};
+obj.toString(); // "[object lison]"
+
+// 值为存取器 get 方法
+let obj2 = {
+  get [Symbol.toStringTag]() {
+    return "haha";
+  }
+};
+obj2.toString(); // "[object haha]"
+```
+
+**Symbol.unscopables**
+
+	这个值和 with 命令有关，我们先来看下 with 怎么使用
+
+```javascript
+const obj = {
+  a: "a",
+  b: "b"
+};
+
+// 限制了内部变量的取值范围, 之前默认在window对象上取值, 现在在obj对象上取值
+with (obj) {
+  console.log(a); // "a"
+  console.log(b); // "b"
+}
+// 如果是在TypeScript开发环境中，这段代码可能with会报错：不支持 "with" 语句，这是因为在严格模式下，是不允许使用with的。
+```
+
+	可以看到，使用 with 传入一个对象后，在代码块中访问对象的属性就不需要写对象了，直接就可以用它的属性。
+
+	对象的 Symbol.unscopables 属性指向一个对象，
+	该对象包含了当使用 with 关键字时，
+	哪些属性被 with 环境过滤掉
+
+	下面代码中显示为 xxx:true 的都是被过滤掉的属性, 也就是在with中无法访问到
+
+```javascript
+console.log(Array.prototype[Symbol.unscopables]);
+/*
+{
+    copyWithin: true
+    entries: true
+    fill: true
+    find: true
+    findIndex: true
+    includes: true
+    keys: true
+    values: true
+}
+*/
+
+with(Array.prototype){
+console.log(pop)
+}
+// ƒ pop() { [native code] }
+
+with(Array.prototype){
+	console.log(fill)
+}
+// Uncaught ReferenceError: fill is not defined
+```
 
 #### 在TypeScript中使用symbol类型
 
