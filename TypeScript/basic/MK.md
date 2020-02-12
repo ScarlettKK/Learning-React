@@ -18,6 +18,9 @@ TS中指定类型的时候要用`number`，这个是TypeScript的类型`关键�
 
 包括你后面见到的string、boolean等都是TypeScript的类型关键字，不是JavaScript语法，这点要区分开。
 
+
+
+
 ## TS 与 JS 类似的类型
 
 ### number
@@ -87,6 +90,14 @@ getKeys(123) // error 类型“123”的参数不能赋给类型“object”的�
 ```
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbqf9v1xrij318g0rqwid.jpg">
+
+
+
+
+
+
+
+
 
 ## TS 中的新增的类型
 
@@ -275,6 +286,15 @@ console.log(lisonInfo.address); // error 类型“{ name: string; } & { age: num
 #### 其他
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbqh3xz0vjj317n0u0afy.jpg">
+
+
+
+
+
+
+
+
+## 更多详细的类型知识
 
 ### symbol
 
@@ -625,6 +645,374 @@ const obj = {
     [key2]: 'value2'
 }
 console.log(obj[key1])
-console.log(obj[key2]) // error 类型“symbol”不能作为索引类型使用。
+console.log(obj[key2]) // error 类型“symbol”不能作为索引类型使用, unique symbol才可以
 ```
 
+### 枚举
+
+枚举是 TypeScript 新增加的一种数据类型，这在其他很多语言中很常见，但是 JavaScript 却没有。
+
+使用枚举，我们可以给一些难以理解的常量赋予一组具有意义的直观的名字，使其更为直观，
+
+你可以理解枚举就是一个字典
+
+枚举使用 enum 关键字定义，并且 TypeScript 支持数字和字符串的枚举。
+
+#### 数字枚举
+
+```typescript
+enum Status {// 这里你的TSLint可能会报一个：枚举声明只能与命名空间或其他枚举声明合并
+  Uploading,
+  Success,
+  Failed
+}
+console.log(Status.Uploading); // 0
+console.log(Status["Success"]); // 1
+console.log(Status.Failed); // 2
+```
+
+我们使用enum关键字定义了一个枚举值 Status，它包含三个字段，每个字段间用逗号隔开。
+
+我们使用枚举值的元素值时，就像访问对象的属性一样，
+
+你可以使用’.‘操作符和’[]'两种形式访问里面的值，这和对象一样。
+
+再来看输出的结果，Status.Uploading 是 0，Status['Success']是 1，Status.Failed 是 2，
+
+我们在定义枚举 Status 的时候，并没有指定索引号，是因为这是默认的编号，当然我们也可以自己指定
+
+注意 数值索引 的值 是默认由 前一个索引值 递增的
+
+```typescript
+// 修改起始编号
+enum Color {
+  Red = 2,
+  Blue,
+  Yellow
+}
+console.log(Color.Red, Color.Blue, Color.Yellow); // 2 3 4
+
+// 指定任意字段的索引值
+enum Status {
+  Success = 200,
+  NotFound = 404,
+  Error = 500
+}
+console.log(Status.Success, Status.NotFound, Status.Error); // 200 404 500
+
+// 指定部分字段，其他使用默认递增索引
+enum Status {
+  Ok = 200,
+  Created,
+  Accepted,
+  BadRequest = 400,
+  Unauthorized
+}
+console.log(Status.Created, Status.Accepted, Status.Unauthorized); // 201 202 401
+```
+
+数字枚举在定义值的时候，可以使用计算值和常量。
+
+但是要注意，如果某个字段使用了计算值或常量，
+
+那么该字段后面紧接着的字段`必须设置初始值`，
+
+因为从这里以后不能使用默认的递增值了
+
+```typescript
+const getValue = () => {
+  return 0;
+};
+enum ErrorIndex {
+  a = getValue(),
+  b, // error 枚举成员必须具有初始化的值
+  c
+}
+enum RightIndex {
+  a = getValue(),
+  b = 1,
+  c
+}
+const Start = 1;
+enum Index {
+  a = Start,
+  b, // error 枚举成员必须具有初始化的值
+  c
+}
+```
+
+#### 反向映射
+
+我们定义一个枚举值的时候，可以通过 Enum[‘key’]或者 Enum.key 的形式获取到对应的值 value。
+
+TypeScript 还支持反向映射，但是反向映射只支持数字枚举，字符串枚举是不支持的。
+
+```typescript
+enum Status {
+  Success = 200,
+  NotFound = 404,
+  Error = 500
+}
+console.log(Status["Success"]); // 200
+console.log(Status[200]); // 'Success'
+console.log(Status[Status["Success"]]); // 'Success'
+```
+
+TypeScript 中定义的`枚举，编译之后其实是对象`，我们来看下上面这个例子中的枚举值 Status 编译后的样子：
+
+```javascript
+{
+	// 枚举值的字段名 分别作为 对象的属性名 和 值
+    200: "Success",
+    404: "NotFound",
+    500: "Error",
+	
+	// 枚举值的字段值 分别作为 对象的值 和 属性名
+    Error: 500,
+    NotFound: 404,
+    Success: 200
+}
+```
+
+可以看到，TypeScript 会把我们定义的 枚举值的字段名 分别作为 对象的属性名 和 值，
+
+把 枚举值的字段值 分别作为 对象的值 和 属性名，
+
+同时添加到对象中。
+
+这样我们既可以通过枚举值的字段名得到值，也可以通过枚举值的值得到字段名。
+
+#### 字符串枚举
+
+TypeScript2.4 版本新增了字符串枚举，
+
+字符串枚举值要求 每个字段的值 都必须是 字符串字面量，
+
+或者是 该枚举值中 另一个字符串枚举成员
+
+```typescript
+enum Message {
+  Error = "Sorry, error",
+  Success = "Hoho, success"
+}
+console.log(Message.Error); // 'Sorry, error'
+```
+
+再来看我们使用枚举值中其他枚举成员的例子
+
+```typescript
+enum Message {
+  Error = "error message",
+  ServerError = Error,
+  ClientError = Error
+}
+console.log(Message.Error); // 'error message'
+console.log(Message.ServerError); // 'error message'
+```
+
+`注意`，这里的 其他枚举成员 指的是 同一个枚举值中的 枚举成员，
+
+因为字符串枚举不能使用常量或者计算值，
+
+所以也不能使用其他枚举值中的成员。
+
+也就是只能跟自己组里面的成员发生关联, 不能使用到其他组里面的成员
+
+#### 异构枚举
+
+简单来说异构枚举就是枚举值中成员值既有数字类型又有字符串类型
+
+```typescript
+enum Result {
+  Faild = 0,
+  Success = "Success"
+}
+```
+
+但是这种如果不是真的需要，不建议使用。
+
+因为往往我们将一类值整理为一个枚举值的时候，它们的特点是相似的。
+
+比如我们在做接口请求时的返回状态码，如果是状态码都是数值，如果是提示信息，都是字符串，
+
+所以在使用枚举的时候，往往是可以避免使用异构枚举的，重点是做好类型的整理。
+
+#### 枚举成员类型和联合枚举类型(作为一个类型来使用)
+
+如果枚举值里 所有成员的值 都是 字面量类型的值，那么这个枚举的 每个成员 和 枚举值本身 都可以作为类型来使用
+
+但这个枚举值需要满足以下条件:
+
+	不带初始值的枚举成员，例如enum E { A }
+	值为字符串字面量，例如enum E { A = ‘a’ }
+	值为数值字面量，或者带有-符号的数值字面量，例如enum E { A = 1 }、enum E { A = -1 }
+
+当我们的枚举值的 所有成员的值 都是 上面这三种情况 的时候，枚举值 和 成员 就可以作为 类型 来用
+
+(就是枚举值的所有成员都得是 字面量 , 不能是 计算值 或者是 常量const, 或者是 另一个字符串枚举成员 ?)
+
+**枚举成员类型**
+
+我们可以把 符合条件的枚举值的成员 作为类型来使用
+
+```typescript
+enum Animal {
+  Dog = 1,
+  Cat = 2
+}
+
+interface Dog {
+  type: Animal.Dog; // 这里使用Animal.Dog作为类型，指定接口Dog的必须有一个type字段，且类型为Animal.Dog
+}
+interface Cat {
+  type: Animal.Cat; // 这里同上
+}
+
+let cat1: Cat = {
+  type: Animal.Dog // error [ts] 不能将类型“Animal.Dog”分配给类型“Animal.Cat”
+};
+let dog: Dog = {
+  type: Animal.Dog
+};
+```
+
+**联合枚举类型**
+
+当我们的 枚举值 符合条件时，这个 枚举值 就可以看做是一个 包含所有成员的 联合类型
+
+	联合类型在前面课时中几次提到，现在我们来看一下。
+	联合类型实际是几个类型的结合，但是和交叉类型不同，
+	联合类型是要求只要符合联合类型中任意一种类型即可，它使用 | 符号定义。
+
+```typescript
+enum Status {
+  Off,
+  On
+}
+interface Light {
+  status: Status;
+}
+
+enum Animal {
+  Dog = 1,
+  Cat = 2
+}
+const light1: Light = {
+  status: Animal.Dog // error 不能将类型“Animal.Dog”分配给类型“Status”
+};
+
+
+const light2: Light = {
+  status: Status.Off
+};
+const light3: Light = {
+  status: Status.On
+};
+```
+
+上面例子定义接口 Light 的 status 字段的类型为枚举值 Status，
+
+那么此时 status 的属性值必须为 Status.Off 和 Status.On 中的一个，
+
+也就是相当于status: `Status.Off | Status.On`。
+
+#### 运行时的枚举
+
+枚举在编译成 JavaScript 之后实际是一个对象。
+
+这个我们前面讲过了，既然是对象，那么就可以当成对象来使用
+
+```typescript
+enum E {
+  A,
+  B
+}
+const getIndex = (enumObj: { A: number }): number => {
+  return enumObj.A;
+};
+console.log(getIndex(E)); // 0
+```
+
+上面这个例子要求 getIndex 的参数为一个对象，
+
+且必须包含一个属性名为’A’的属性，其值为数值类型，
+
+只要有这个属性即可。
+
+当我们调用这个函数，把枚举值 E 作为实参传入是可以的，
+
+因为它在运行的时候是一个对象，包含’A’这个属性，因为它在运行的时候相当于下面这个对象：
+
+```javascript
+{
+    0: "A",
+    1: "B",
+    A: 0,
+    B: 1
+}
+```
+
+#### const enum
+
+我们定义了枚举值之后，编译成 JavaScript 的代码会创建一个对应的对象，这个对象我们可以在程序运行的时候使用。
+
+但是如果我们使用枚举只是为了让程序可读性好，并不需要编译后的对象呢？
+
+这样会增加一些编译后的代码量。
+
+所以 TypeScript 在 1.4 新增 const enum*(完全嵌入的枚举)*，在之前讲的定义枚举的语句之前加上const关键字，
+
+这样编译后的代码不会创建这个对象，只是会从枚举里拿到相应的值进行替换
+
+```typescript
+enum Status {
+  Off,
+  On
+}
+const status = Status.On;
+
+const enum Animal {
+  Dog,
+  Cat
+}
+const animal = Animal.Dog;
+```
+
+上面的例子编译成 JavaScript 之后是这样的：
+
+```javascript
+var Status;
+(function(Status) {
+  Status[(Status["Off"] = 0)] = "Off";
+  Status[(Status["On"] = 1)] = "On";
+})(Status || (Status = {}));
+var status = Status.On;
+
+var animal = 0; /* Dog */
+```
+
+我们来看下 Status 的处理，
+
+先是定义一个变量 Status，
+
+然后定义一个立即执行函数，在函数内给 Status 添加对应属性，
+
+首先Status[“Off”] = 0是给Status对象设置Off属性，并且值设为 0，这个赋值表达式的返回值是等号右边的值，也就是 0，所以Status[Status[“Off”] = 0] = "Off"相当于Status[0] = “Off”。
+
+这样我们就获得了{"off":0, 0:"off"}这样属性的对象
+
+创建了这个对象之后，将 Status 的 On 属性值赋值给 status；
+
+------------------------
+
+再来看下 animal 的处理，
+
+我们看到编译后的代码并没有像Status创建一个Animal对象，
+
+而是直接把Animal.Dog的值0替换到了const animal = Animal.Dog表达式的Animal.Dog位置，
+
+这就是const enum的用法了。
+
+#### 小结
+
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbtglt1hybj318g06675g.jpg">
