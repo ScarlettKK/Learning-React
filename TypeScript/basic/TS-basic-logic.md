@@ -630,7 +630,7 @@ interface Counter {
   count: number; // 而且这个结构还必须包含一个名为count、值的类型为number类型的属性
 }
 
-const getCounter = (): Counter => { // 这里定义一个函数用来返回这个计数器
+const getCounter = (): Counter => { // 这里定义一个函数用来返回这个计数器 这里的定义是 getCounter 函数返回值类型为Counter
   const c = () => { // 定义一个函数，逻辑和前面例子的一样
     c.count++;
   };
@@ -648,7 +648,7 @@ console.log(counter.count); // 2
 
 上面的例子中，getCounter函数返回值类型为Counter，
 
-它是一个函数，无返回值，即返回值类型为void，
+Counter的实例c是一个函数，无返回值，即返回值类型为void，
 
 它还包含一个属性count，属性返回值类型为number。
 
