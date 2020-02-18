@@ -1592,17 +1592,268 @@ console.log(Parent.age); // error 属性“age”为私有属性，只能在类�
 
 ### 可选类属性
 
+TS 在 2.0 版本，支持可选类属性，也是使用?符号来标记，来看例子：
+
+```typescript
+class Info {
+  name: string;
+  age?: number;         // 可选类属性
+  constructor(name: string, age?: number, public sex?: string) { // 可选类属性(参数)
+    this.name = name;
+    this.age = age;
+  }
+}
+const info1 = new Info("lison"); // 可忽略age参数
+const info2 = new Info("lison", 18);
+const info3 = new Info("lison", 18, "man");
+```
+
 ### 存取器
+
+这个也就 ES6 标准中的存值函数和取值函数，
+
+也就是在设置属性值的时候调用的函数，和在访问属性值的时候调用的函数，(get/set)
+
+用法和写法和 ES6 的没有区别：
+
+```typescript
+class UserInfo {
+  private _fullName: string;
+  constructor() {}
+  get fullName() {  // 取值函数,针对某个属性
+    return this._fullName;
+  }
+  set fullName(value) { // 存值函数,针对某个属性
+    console.log(`setter: ${value}`);
+    this._fullName = value;
+  }
+}
+const user = new UserInfo();
+user.fullName = "Lison Li"; // "setter: Lison Li"  这里是存值的时候自动调用
+console.log(user.fullName); // "Lison Li" 这里是取值的时候自动调用
+```
 
 ### 抽象类
 
+`抽象类`一般用来被其他类继承，`而不直接用它创建实例`。
+
+抽象类 和 类 内部定义 抽象方法，使用abstract关键字，我们先来看个例子：
+
+```typescript
+abstract class People {                           // 抽象类
+  constructor(public name: string) {}
+  abstract printName(): void;                     // 抽象方法
+}
+
+class Man extends People {
+  constructor(name: string) {
+    super(name);
+    this.name = name;
+  }
+  printName() {
+    console.log(this.name);
+  }
+}
+
+const m = new Man(); // error 应有 1 个参数，但获得 0 个
+
+const man = new Man("lison");
+man.printName(); // 'lison'
+
+const p = new People("lison"); // error 无法创建抽象类的实例
+```
+
+上面例子中我们定义了一个抽象类 People，
+
+在抽象类里我们定义 constructor 方法必须传入一个字符串类型参数，并把这个 name 参数值绑定在创建的实例上；
+
+使用abstract关键字定义一个抽象方法 printName，
+
+这个定义可以指定参数，指定参数类型，指定返回类型。
+
+`当我们直接使用抽象类 People 实例化的时候，就会报错，我们只能创建一个继承抽象类的子类，使用子类来实例化。`
+
+我们再来看个例子：
+
+```typescript
+abstract class People {                          // 抽象类
+  constructor(public name: string) {}
+  abstract printName(): void;                    // 抽象方法
+}
+
+class Man extends People {
+  // error 非抽象类“Man”不会实现继承自“People”类的抽象成员"printName"
+  constructor(name: string) {
+    super(name);
+    this.name = name;
+  }
+  // 这里相比上面缺少了对父类 抽象方法 的定义
+}
+
+const m = new Man("lison");
+m.printName(); // error m.printName is not a function
+```
+
+通过上面的例子我们可以看到，`在抽象类里定义的抽象方法，在子类中是不会继承的，所以在子类中必须实现该方法的定义。`
+
+2.0 版本开始，abstract关键字`不仅可以标记类和类里面的方法，还可以标记类中定义的 属性 和 存取器 `：
+
+```typescript
+abstract class People {
+  abstract _name: string;                     // 抽象属性
+  abstract get insideName(): string;          // 抽象存取器
+  abstract set insideName(value: string);     // 抽象存取器
+}
+class Pp extends People {
+  _name: string;
+  insideName: string;
+}
+```
+
+`但是要记住，抽象方法和抽象存取器都不能包含实际的代码块。`
+
+只能用于声明有这个方法, 不能给方法实体
+
 ### 实例类型
+
+当我们定义一个类，并创建实例后，这个实例的类型就是创建他的类：
+
+```typescript
+class People {
+  constructor(public name: string) {}
+}
+let p: People = new People("lison");
+```
+
+当然了，创建实例的时候这`指定 p 的类型为 People 并不是必须的`，TS 会`推断出他的类型`。
+
+虽然指定了类型，但是`当我们再定义一个和 People 类同样实现的类 Animal，并且创建实例赋值给 p 的时候，是没有问题的`：
+
+```typescript
+class Animal {
+  constructor(public name: string) {}
+}
+
+// 在p已经指定好是People类型的前提下
+let p = new Animal("lark");
+```
+
+所以，如果你想实现 `对创建实例的类的判断`，还是需要用到`instanceof`关键字。
 
 ### 对前面跳过知识的补充
 
+现在我们把之前因为没有学习类的使用，所以暂时跳过的内容补回来。
 
+---------------------------
+类类型接口
 
+使用`接口`可以`强制一个类的定义必须包含某些内容`，先来看个例子：
 
+```typescript
+interface FoodInterface {
+  type: string;
+}
+
+class FoodClass implements FoodInterface {          // 使用接口可以强制一个类的定义必须包含某些内容
+  // error Property 'type' is missing in type 'FoodClass' but required in type 'FoodInterface'
+  static type: string;
+  constructor() {}
+}
+```
+
+上面接口 FoodInterface 要求使用该接口的值必须有一个 type 属性，
+
+定义的类 FoodClass 要使用接口，需要使用关键字implements
+
+implements关键字用来指定一个类要继承的接口，
+
+如果是接口和接口、类和类直接的继承，使用extends，
+
+如果是类继承接口，则用implements。
+
+有一点需要注意，`接口检测的是 使用该接口定义的类 创建的实例`，
+
+所以上面例子中虽然定义了静态属性 type，但静态属性不会添加到实例上，所以还是报错，所以我们可以这样改：
+
+```typescript
+interface FoodInterface {
+  type: string;
+}
+class FoodClass implements FoodInterface {
+  constructor(public type: string) {}              // 属性需要添加到实例上
+}
+```
+
+当然这个需求你也可以使用本节课学习的抽象类实现：
+
+```typescript
+abstract class FoodAbstractClass {               // 抽象类代替接口
+  abstract type: string;
+}
+class Food extends FoodAbstractClass {
+  constructor(public type: string) {
+    super();
+  }
+}
+```
+
+---------------------------
+接口继承类
+
+接口可以继承一个类，
+
+当接口继承了该类后，会继承类的成员，但是不包括其实现，也就是只继承成员以及成员类型。
+
+接口还会继承类的private和protected修饰的成员，
+
+当接口继承的这个类中包含这两个修饰符修饰的成员时，这个接口只可被这个类或他的子类实现。
+
+```typescript
+class A {
+  protected name: string;
+}
+interface I extends A {}     // 接口可以继承一个类
+
+class B implements I {} // error Property 'name' is missing in type 'B' but required in type 'I'
+class C implements I {
+  // error 属性“name”受保护，但类型“C”并不是从“A”派生的类
+  name: string;
+}
+class D extends A implements I {
+  getName() {
+    return this.name;
+  }
+}
+```
+
+---------------------------
+在泛型中使用类类型
+
+这里我们先来看个例子：
+
+```typescript
+const create = <T>(c: { new (): T }): T => {
+  return new c();
+};
+
+class Info {
+  age: number;
+}
+
+create(Info).age;
+create(Info).name; // error 类型“Info”上不存在属性“name”
+```
+
+在这个例子里，我们创建了一个一个 create 函数，传入的参数是一个类，返回的是一个类创建的实例，这里有几个点要讲：
+
+    参数 c 的类型定义中，new()代表调用类的构造函数，他的类型也就是类创建实例后的实例的类型。
+    return new c()这里使用传进来的类 c 创建一个实例并返回，返回的实例类型也就是函数的返回值类型。
+
+所以通过这个定义，TS 就知道，调用 create 函数，传入的和返回的值都应该是同一个类类型。
+
+小结
+
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc0fy2uqfmj313h0u0gs7.jpg">
 
 
 
