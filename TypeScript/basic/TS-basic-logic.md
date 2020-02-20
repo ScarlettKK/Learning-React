@@ -1832,7 +1832,7 @@ class D extends A implements I {
 这里我们先来看个例子：
 
 ```typescript
-const create = <T>(c: { new (): T }): T => { // c的类型是 Info ??
+const create = <T>(c: { new (): T }): T => { // c的类型是 Info ??  为啥不写c:T
   return new c();  // 返回实例
 };
 
