@@ -1284,5 +1284,184 @@ T2 传入的类型为 any，因为 any 是任何类型的子类型，
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc7jutj75rj318g0eb416.jpg">
 
+## 装饰器 ??? 有点晕乎	
 
+ECMAScript 的装饰器提案到现在还没有定案，所以我们直接看 TS 中的装饰器。
+
+同样在 TS 中，装饰器仍然是一项实验性特性，未来可能有所改变，
+
+所以如果你要使用装饰器，需要在 tsconfig.json 的编译配置中开启experimentalDecorators，将它设为 true。
+
+`通过添加 @方法名 可以对一些对象进行装饰包装然后返回一个被包装过的对象`
+
+在不改变原有类和类属性的基础上扩展些功能，这也是装饰器出现的原因。
+
+例子:
+
+```javascript
+@log // 要传入的参数MyClass紧紧跟随
+class MyClass { }
+
+function log(target) { // 这个 target 在这里就是 MyClass 这个类
+   target.prototype.logger = () => `${target.name} 被调用`
+}
+
+const test = new MyClass()
+test.logger() // MyClass 被调用
+```
+
+### 基础
+
+----------------------------------
+装饰器定义
+
+装饰器是一种新的声明，它能够作用于`类声明、方法、访问符、属性和参数上`。
+
+使用@符号加一个名字来定义，如@decorat，
+
+这的 decorat 必须是一个函数 或者 求值后是一个函数，
+
+这个 decorat 命名不是写死的，是你自己定义的，这个函数在运行的时候被调用，被装饰的声明作为参数会自动传入。
+
+要注意`装饰器要紧挨着要修饰的内容的前面`，而且所有的装饰器不能用在声明文件(.d.ts)中，和任何外部上下文中（比如 declare，关于.d.ts 和 declare，我们都会在讲声明文件一课时学习）。
+
+比如下面的这个函数，就可以作为装饰器使用：
+
+```typescript
+function setProp (target) {
+    // ...
+}
+@setProp
+```
+
+先定义一个函数，然后这个函数有一个参数，就是要装饰的目标，
+
+装饰的作用不同，这个target代表的东西也不同，下面我们具体讲的时候会讲。
+
+定义了这个函数之后，它就可以作为装饰器，使用@函数名的形式，写在要装饰的内容前面。
+
+----------------------------------
+装饰器工厂
+
+装饰器工厂也是一个函数，它的返回值是一个函数，返回的函数作为装饰器的调用函数。
+
+如果使用装饰器工厂，那么在使用的时候，就要加上函数调用，如下：
+
+```typescript
+function setProp () {
+    return function (target) {
+        // ...
+    }
+}
+
+@setProp()
+```
+
+----------------------------------
+装饰器组合
+
+装饰器可以组合，也就是对于同一个目标，引用多个装饰器：
+
+```typescript
+// 可以写在一行
+@setName @setAge target // target就是要传入的参数
+// 可以换行
+@setName
+@setAge
+target
+```
+
+但是这里要格外注意的是，多个装饰器的执行顺序：
+
+	装饰器工厂从 上到下依次执行，但是 只是用于 返回函数 但不调用函数；
+	装饰器函数从 下到上依次执行，也就是 执行 工厂函数 返回的函数。
+
+我们以下面的两个装饰器工厂为例：
+
+```typescript
+function setName () { // 装饰器工厂
+    console.log('get setName')
+    return function (target) { // 装饰器函数
+        console.log('setName')
+    }
+}
+function setAge () { // 装饰器工厂
+    console.log('get setAge')
+    return function (target) { // 装饰器函数
+        console.log('setAge')
+    }
+}
+
+@setName()
+@setAge()
+class Test {}
+
+// 打印出来的内容如下：
+// 装饰器工厂从 上到下依次执行
+// 装饰器函数从 下到上依次执行
+/**
+ 'get setName'  // 返回函数 但不调用函数
+ 'get setAge'   // 返回函数 但不调用函数
+ 'setAge'       // 执行 工厂函数 返回的函数
+ 'setName'      // 执行 工厂函数 返回的函数
+*/
+```
+
+可以看到，多个装饰器，会先执行装饰器工厂函数获取所有装饰器，然后再从后往前执行装饰器的逻辑。
+
+----------------------------------
+装饰器求值
+
+类的定义中 不同声明上的装饰器 将按以下规定的顺序引用：
+
+    1. 参数装饰器，方法装饰器，访问符装饰器或属性装饰器应用到每个实例成员；
+	2. 参数装饰器，方法装饰器，访问符装饰器或属性装饰器应用到每个静态成员；
+	3. 参数装饰器应用到构造函数；
+	4. 类装饰器应用到类。
+
+### 类装饰器
+
+类装饰器在类声明之前声明，要记着装饰器要紧挨着要修饰的内容，类装饰器应用于类的声明。
+
+类装饰器表达式会在运行时当做函数被调用，它由唯一一个参数，就是装饰的这个类。
+
+```typescript
+let sign = null;
+function setName(name: string) {
+  return function(target: Function) {
+    sign = target;
+    console.log(target.name);
+  };
+}
+
+@setName("lison") // Info
+class Info {
+  constructor() {}
+}
+
+console.log(sign === Info); // true
+console.log(sign === Info.prototype.constructor); // true
+```
+
+可以看到，我们在装饰器里打印出类的 name 属性值，也就是类的名字，
+
+我们没有使用 Info 创建实例，控制台也打印了"Info"，因为装饰器作用与装饰的目标声明时。
+
+而且我们将装饰器里获取的参数 target 赋值给 sign，最后判断 sign 和定义的类 Info 是不是相等，
+
+如果相等说明它们是同一个对象，结果是 true。
+
+而且类 Info 的原型对象的 constructor 属性指向的其实就是 Info 本身。
+
+这一章节先行跳过...
+
+### 方法装饰器
+
+### 访问器装饰器
+
+### 属性装饰器
+
+### 参数装饰器
+
+### 小结
 
