@@ -262,7 +262,7 @@ JSX的存在是为了方便开发人员写代码
 
 Redux原理：
 
-<img src="https://img2018.cnblogs.com/blog/1147701/201902/1147701-20190218205339787-94429163.jpg">
+<img src="https://tva1.sinaimg.cn/large/00831rSTgy1gcmnbc1u64j31ds0n077e.jpg">
 
 类似Angular的Service，大家都把鸡蛋放在同一个篮子里，一个人改了篮子里的内容，篮子会自动通知其他人。
 
